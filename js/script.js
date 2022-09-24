@@ -52,3 +52,68 @@ const slides = [
 ];
 
 console.log(slides);
+
+
+
+const app = new Vue({
+    el: '#app',
+    data: {
+        activeIndex: 0,
+        slides,
+        intervalId: undefined
+    },
+
+    mounted() {
+        console.log('mounted!');
+        this.createInterval
+    },
+
+    methods: {
+        createInterval() {
+            this.intervalId = setInterval(this.showNextImage, 1000)
+        },
+
+        deleteInterval() {
+            if (this.intervalId) {
+                clearInterval(this.intervalId);
+            }
+        },
+
+        showPreviousImage:
+            function () {
+                console.log('showPreviousImage');
+
+                if (this.activeIndex > 0) {
+                    this.activeIndex--;
+                } else {
+                    this.activeIndex = this.slides.length - 1;
+                }
+                this.deleteInterval()
+            },
+
+        showNextImage() {
+            console.log('showNextImage');
+            if (this.activeIndex < this.slides.length - 1) {
+                this.activeIndex++;
+            } else {
+                this.activeIndex = 0;
+            }
+        },
+
+        onNextClick() {
+            this.showNextImage();
+            this.deleteInterval();
+            this.createInterval();
+        },
+
+        onPreviousClick() {
+            this.showPreviousImage();
+            this.deleteInterval();
+            this.createInterval();
+        },
+
+        selectImage(activeIndex) {
+            this.activeIndex = activeIndex;
+        }
+    }
+});
